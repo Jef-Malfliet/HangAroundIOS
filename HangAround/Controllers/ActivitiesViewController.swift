@@ -21,6 +21,8 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
         activitiesTable.delegate = self
         activitiesTable.dataSource = self
         apiManager.delegate = self
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addActivity))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,24 +30,53 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
         apiManager.getActivities(personId: "5dcff60a4d391c064b42089e")
     }
     
-    func updatePerson(_ apiMananger: APIManager, _ peron: Person) {
+    @objc private func addActivity(){
+        print("segue naar newActivity")
+        let alert = UIAlertController(title: "New Activity", message: "Name:", preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addTextField { (textField) in
+            textField.text = "name"
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "Add", style: UIAlertAction.Style.default, handler: {action in
+            let textField = alert.textFields![0]
+            if (textField.text != ""){
+                let destination = self.storyboard?.instantiateViewController(withIdentifier: "ActivityDetailViewController") as! ActivityDetailViewController
+                destination.activity = Activity(name: textField.text!)
+                self.show(destination, sender: self)
+            }
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func updatePerson(_ apiManager: APIManager, _ peron: Person) {
         fatalError()
     }
     
-    func updateFriends(_ apiMananger: APIManager, _ friends: [Person?]) {
+    func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
         fatalError()
     }
     
-    func updateActivities(_ apiMananger: APIManager, _ activities: [Activity?]) {
+    func updateActivities(_ apiManager: APIManager, _ activities: [Activity?]) {
         self.activities = activities
         DispatchQueue.main.async {
             self.activitiesTable.reloadData()
         }
     }
     
-    func updateActivity(_ apiMananger: APIManager, _ activity: Activity) {
+    func updateActivity(_ apiManager: APIManager, _ activity: Activity) {
         fatalError()
     }
+    
+    func deleteActivity(_ apiManager: APIManager, _ activity: Activity) {
+        activities.removeAll(where: {$0?.id == activity.id})
+        DispatchQueue.main.async {
+            self.activitiesTable.reloadData()
+        }
+    }
+    
     func didFail(_ error: Error) {
         print(error.localizedDescription, error)
     }
@@ -56,7 +87,7 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
             else {
                 return
         }
-        activityDetailViewController.activity = activities[index]
+        activityDetailViewController.activity = activities[index]!
     }
 }
 
@@ -77,9 +108,19 @@ extension ActivitiesViewController: UITableViewDataSource, UITableViewDelegate{
         print("segue naar detail")
         let activity = activities[indexPath.row]
         let destination = ActivityDetailViewController()
-        destination.activity = activity
+        destination.activity = activity!
         
         self.performSegue(withIdentifier: "ActivitiesToActivityDetail", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            apiManager.deleteActivity(activityId: self.activities[indexPath.row]!.id)
+        }
     }
 }
 

@@ -29,6 +29,10 @@ class PersonWithRoleViewController: UIViewController {
             textFieldRole.text = safePerson.role
         }
         
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteParticipant))
+        
         textFieldRole.addTarget(self, action: #selector(roleChanged), for: .editingChanged)
     }
     
@@ -38,8 +42,14 @@ class PersonWithRoleViewController: UIViewController {
             self.delegate?.updateActivityRole(activity, index)
         }
     }
+    
+    @objc private func deleteParticipant(){
+        self.delegate?.deleteParticipant(personWithRole!.personId)
+        navigationController?.popViewController(animated: true)
+    }
 }
 
 protocol PersonWithRoleViewControllerDelegate {
     func updateActivityRole(_ activity: Activity?, _ index: Int)
+    func deleteParticipant(_ personId: String)
 }

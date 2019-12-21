@@ -8,19 +8,11 @@
 
 import Foundation
 
-protocol APIManagerDelegate {
-    func updatePerson(_ apiMananger: APIManager, _ person: Person)
-    func updateFriends(_ apiMananger: APIManager, _ friends: [Person?])
-    func updateActivities(_ apiMananger: APIManager, _ activities: [Activity?])
-    func updateActivity(_ apiMananger: APIManager, _ activity: Activity)
-    func didFail(_ error: Error)
-}
-
 struct APIManager {
     
     //let BASEURL = "https://hangaround.herokuapp.com"
     
-    let BASEURL = "https://70c22fe9.ngrok.io"
+    let BASEURL = "https://7f90b59c.ngrok.io"
     var delegate: APIManagerDelegate?
     
     //MARK: - Activity
@@ -71,10 +63,10 @@ struct APIManager {
     
     func makeActivity(activity: Activity){
         let url = "\(BASEURL)/makeActivity"
-        
+        print(url)
         let encoder = JSONEncoder()
         do{
-            let data = try encoder.encode(activity)
+            let data = try encoder.encode(activity.toDTO())
             Post(urlString: url, data: data) { (data, response, error) in
                 if error != nil {
                     self.delegate?.didFail(error!)
@@ -122,6 +114,27 @@ struct APIManager {
             }
         }catch{
             print("couldn't encode activity while updating")
+        }
+    }
+    
+    func deleteActivity(activityId: String){
+        let url = "\(BASEURL)/deleteActivity?id=\(activityId)"
+        print(url)
+        Delete(urlString: url) { (data, response, error) in
+            if(error != nil){
+                self.delegate?.didFail(error!)
+                return
+            }
+            if let safeData = data {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601withFractionalSeconds
+                do{
+                    let activityContainer = try decoder.decode(ActivitiesNetworkContainer.self, from: safeData)
+                    self.delegate?.deleteActivity(self, activityContainer.activities[0])
+                }catch{
+                    self.delegate?.didFail(error)
+                }
+            }
         }
     }
     
@@ -218,6 +231,16 @@ struct APIManager {
         }
     }
     
+    func Delete(urlString: String, OnCompletionCallback: @escaping ( Data?, URLResponse?, Error? ) -> Void) {
+        if let url = URL(string: urlString){
+            var request = URLRequest(url: url)
+            request.httpMethod = "DELETE"
+            
+            let task = URLSession.shared.dataTask(with: request, completionHandler: OnCompletionCallback)
+            task.resume()
+        }
+    }
+    
     func Put(urlString: String, data: Data, OnCompletionCallback: @escaping ( Data?, URLResponse?, Error? ) -> Void) {
         if let url = URL(string: urlString){
             var request = URLRequest(url: url)
@@ -229,4 +252,13 @@ struct APIManager {
             task.resume()
         }
     }
+}
+
+protocol APIManagerDelegate {
+    func updatePerson(_ apiManager: APIManager, _ person: Person)
+    func updateFriends(_ apiManager: APIManager, _ friends: [Person?])
+    func updateActivities(_ apiManager: APIManager, _ activities: [Activity?])
+    func updateActivity(_ apiManager: APIManager, _ activity: Activity)
+    func deleteActivity(_ apiManager: APIManager, _ activity: Activity)
+    func didFail(_ error: Error)
 }

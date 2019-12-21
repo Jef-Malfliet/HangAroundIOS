@@ -9,14 +9,18 @@
 import Foundation
 
 struct Activity: Codable {
-    var id: String
+    var id: String = ""
     var name: String
-    var owner: String
-    var startDate: Date
-    var endDate: Date
-    var place: String
-    var participants: [PersonWithRole?]
-    var description: String
+    var owner: String = "5dcff60a4d391c064b42089e"
+    var startDate: Date = Date()
+    var endDate: Date = Date()
+    var place: String = ""
+    var participants: [PersonWithRole?] = []
+    var description: String = ""
+    
+    init(name: String) {
+        self.name = name
+    }
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"

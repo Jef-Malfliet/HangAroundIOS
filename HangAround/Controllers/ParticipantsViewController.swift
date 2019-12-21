@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWithRoleViewControllerDelegate {
+class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWithRoleViewControllerDelegate, AddParticipantViewControllerDelegate {
     
     @IBOutlet var tableviewParticipants: UITableView!
     
@@ -22,6 +22,8 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
         super.viewDidLoad()
         
         apiManager?.delegate = self
+        
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         self.title = "Participants"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(goToNewParticipant))
@@ -38,12 +40,10 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
     }
     
     @objc private func goToNewParticipant(){
-        let destination = storyboard?.instantiateViewController(withIdentifier: "AddParticipantViewController") as! AddParticipantViewController
-        
-        show(destination, sender: self)
+        self.apiManager?.getFriends(personId: "5dcff60a4d391c064b42089e")
     }
     
-    func updatePerson(_ apiMananger: APIManager, _ person: Person) {
+    func updatePerson(_ apiManager: APIManager, _ person: Person) {
         DispatchQueue.main.async {
             if let index = self.activity!.participants.firstIndex(where: {$0?.personId == person.id}){
                 if let cell = self.tableviewParticipants.cellForRow(at: IndexPath(row: index, section: 0)){
@@ -54,15 +54,27 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
         }
     }
     
-    func updateFriends(_ apiMananger: APIManager, _ friends: [Person?]) {
+    func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
+        print("segue naar addParticipant")
+        DispatchQueue.main.async {
+            let destination = self.storyboard?.instantiateViewController(withIdentifier: "AddParticipantViewController") as! AddParticipantViewController
+            destination.friends = friends
+            destination.apiManager = apiManager
+            destination.delegate = self
+            destination.activity = self.activity
+            self.show(destination, sender: self)
+        }
+    }
+    
+    func updateActivities(_ apiManager: APIManager, _ activities: [Activity?]) {
         fatalError()
     }
     
-    func updateActivities(_ apiMananger: APIManager, _ activities: [Activity?]) {
-        fatalError()
+    func updateActivity(_ apiManager: APIManager, _ activity: Activity) {
+        //als er een participant wordt toegevoegd
     }
     
-    func updateActivity(_ apiMananger: APIManager, _ activity: Activity) {
+    func deleteActivity(_ apiManager: APIManager, _ activity: Activity) {
         fatalError()
     }
     
@@ -78,6 +90,17 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
             }
         }
     }
+    
+    func addParticipant(_ personWithRole: PersonWithRole) {
+        self.activity?.participants.append(personWithRole)
+        tableviewParticipants.reloadData()
+    }
+    
+    func deleteParticipant(_ personId: String) {
+        self.activity?.participants.removeAll(where: {$0?.personId == personId})
+        tableviewParticipants.reloadData()
+    }
+    
 }
 
 extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource{

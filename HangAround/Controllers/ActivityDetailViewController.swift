@@ -15,6 +15,8 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     
     private var apiManager = APIManager()
     
+    var backButton : UIBarButtonItem!
+    
     var headerNames = ["Owner", "Place", "Description","Start date", "End date", "Participants"]
     var activity: Activity?
     var owner: Person?
@@ -31,10 +33,16 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
         activityDetailTable.register(UINib(nibName: "ActivityDescriptionCell", bundle: nil), forCellReuseIdentifier: "ReusableDescriptionCell")
         activityDetailTable.register(UINib(nibName: "ParticipantsCell", bundle: nil), forCellReuseIdentifier: "ParticipantsCell")
         
-        if let safeActivity = activity{
-            self.title = safeActivity.name
-            apiManager.getPerson(personId: safeActivity.owner)
-        }
+        self.title = activity?.name
+        
+        apiManager.delegate = self
+        apiManager.getPerson(personId: activity!.owner)
+        
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        self.backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(askForSave))
+        self.navigationItem.leftBarButtonItem = backButton
         
         saveButton.isEnabled = false
     }
@@ -44,10 +52,34 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
         apiManager.delegate = self
     }
     
-    @IBAction func buttonClicked(_ sender: Any) {
-        if let safeActivity = activity{
-            apiManager.updateActivity(activity: safeActivity)
+    @objc private func askForSave() {
+        if(self.saveButton.isEnabled){
+            let alert = UIAlertController(title: "Save", message: "Are you sure you want to dismiss your changes?", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: { action in
+                self.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: {action in
+                self.saveActivity()
+                self.navigationController?.popViewController(animated: true)
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
         }
+    }
+    
+    fileprivate func saveActivity() {
+        if (activity!.id != ""){
+            apiManager.updateActivity(activity: activity!)
+        } else {
+            apiManager.makeActivity(activity: activity!)
+        }
+    }
+    
+    @IBAction func buttonClicked(_ sender: Any) {
+        saveActivity()
         switchButtonOff()
     }
     
@@ -59,16 +91,20 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
         }
     }
     
-    func updateFriends(_ apiMananger: APIManager, _ friends: [Person?]) {
+    func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
         fatalError()
     }
     
-    func updateActivities(_ apiMananger: APIManager, _ activities: [Activity?]) {
+    func updateActivities(_ apiManager: APIManager, _ activities: [Activity?]) {
         fatalError()
     }
     
-    func updateActivity(_ apiMananger: APIManager, _ activity: Activity) {
+    func updateActivity(_ apiManager: APIManager, _ activity: Activity) {
         self.activity = activity
+    }
+    
+    func deleteActivity(_ apiManager: APIManager, _ activity: Activity) {
+        fatalError()
     }
     
     func didFail(_ error: Error) {
@@ -76,12 +112,10 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     }
     
     func activityHasChanged(_ activity: Activity?) {
-        if let safeActivity = self.activity{
-            if let safeUpdatedActivity = activity{
-                if(safeActivity.participants.count != safeUpdatedActivity.participants.count || !safeActivity.participants.elementsEqual(safeUpdatedActivity.participants)){
-                    self.activity = activity
-                    switchButtonOn()
-                }
+        if let safeUpdatedActivity = activity{
+            if(self.activity!.participants.count != safeUpdatedActivity.participants.count || !self.activity!.participants.elementsEqual(safeUpdatedActivity.participants)){
+                self.activity = activity!
+                switchButtonOn()
             }
         }
     }
@@ -114,40 +148,36 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
         case 0:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableOwnerCell", for: indexPath)
                 as! ActivityOwnerCell
-            apiManager.getPerson(personId: activity!.owner)
+            if (activity?.id != ""){
+                apiManager.getPerson(personId: activity!.owner)
+            } else {
+                cell.labelOwner.text = ""
+            }
             return cell
         case 1:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusablePropertyCell", for: indexPath)
                 as! ActivityDetailCell
-            cell.textviewPlace.text = activity?.place
+            cell.textviewPlace.text = activity!.place
             cell.textviewPlace.isScrollEnabled = false
             cell.textviewPlace.delegate = self
             return cell
         case 2:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDescriptionCell", for: indexPath)
                 as! ActivityDescriptionCell
-            cell.textviewDescription.text = activity?.description
+            cell.textviewDescription.text = activity!.description
             cell.textviewDescription.isScrollEnabled = true
             cell.textviewDescription.delegate = self
             return cell
         case 3:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDateCell", for: indexPath)
                 as! ActivityDateCell
-            if let date = activity?.startDate {
-                cell.datepicker.date = date
-            } else {
-                cell.datepicker.date = Date()
-            }
+            cell.datepicker.date = activity!.startDate
             cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
             return cell
         case 4:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDateCell", for: indexPath)
                 as! ActivityDateCell
-            if let date = activity?.endDate {
-                cell.datepicker.date = date
-            } else {
-                cell.datepicker.date = Date()
-            }
+            cell.datepicker.date = activity!.endDate
             cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
             return cell
         case 5:
