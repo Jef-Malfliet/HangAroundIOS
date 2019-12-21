@@ -1,0 +1,6 @@
+framework module Pods_HangAround {
+  umbrella header "Pods-HangAround-umbrella.h"
+
+  export *
+  module * { export * }
+}

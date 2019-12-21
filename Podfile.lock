@@ -1,0 +1,20 @@
+PODS:
+  - Auth0 (1.19.3):
+    - SimpleKeychain
+  - SimpleKeychain (0.9.0)
+
+DEPENDENCIES:
+  - Auth0 (~> 1.19)
+
+SPEC REPOS:
+  trunk:
+    - Auth0
+    - SimpleKeychain
+
+SPEC CHECKSUMS:
+  Auth0: 195ea089de471c72bf95eb5320ff86c224debf3c
+  SimpleKeychain: 3be49072fd2d82de8fa83d847ef1e548622f8fc5
+
+PODFILE CHECKSUM: 8c32bfa19aa67d2274be0d058d0038d03a4d9a4b
+
+COCOAPODS: 1.8.4

@@ -1,14 +1,12 @@
+<!-- Auth0.plist -->
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>SchemeUserState</key>
-	<dict>
-		<key>HangAround.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
-		</dict>
-	</dict>
+  <key>ClientId</key>
+  <string>GaIRLJzyGsO7h6Lf2makyBsGdVYkPEmE</string>
+  <key>Domain</key>
+  <string>dev-7lg1fu6u.eu.auth0.com</string>
 </dict>
 </plist>
