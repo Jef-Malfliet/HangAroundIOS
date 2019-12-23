@@ -6,11 +6,13 @@ You can create upcoming activities and add your friends as participators. Partic
 
 Use it to organise your next backyard BBQ, plan your next camping trip, arrange the next time you go to a festival with friend...
 
-## Testaccount
+## Login
 
 Email: test@test.com
 
 Password: P@ssword1111
+
+Or make your very own account!
 
 ## Technologies
 
