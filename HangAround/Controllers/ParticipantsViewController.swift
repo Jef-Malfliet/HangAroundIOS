@@ -17,6 +17,7 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
     var activity: Activity?
     var apiManager: APIManager?
     var personNames: [Int:String] = [:]
+    var person: Person = Auth0Manager.instance.person!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,7 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
     }
     
     @objc private func goToNewParticipant(){
-        self.apiManager?.getFriends(personId: "5dcff60a4d391c064b42089e")
+        self.apiManager?.getFriends(personId: self.person.id)
     }
     
     func updatePerson(_ apiManager: APIManager, _ person: Person) {
@@ -66,12 +67,16 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
         }
     }
     
+    func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool) {
+        fatalError()
+    }
+    
     func updateActivities(_ apiManager: APIManager, _ activities: [Activity?]) {
         fatalError()
     }
     
     func updateActivity(_ apiManager: APIManager, _ activity: Activity) {
-        //als er een participant wordt toegevoegd
+        fatalError()
     }
     
     func deleteActivity(_ apiManager: APIManager, _ activity: Activity) {

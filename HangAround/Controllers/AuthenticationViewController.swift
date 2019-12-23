@@ -9,44 +9,95 @@
 import UIKit
 import Auth0
 
-class AuthenticationViewController: UIViewController {
+class AuthenticationViewController: UIViewController, APIManagerDelegate {
     
-    private var isAuthenticated = false
+    @IBOutlet var buttonLoginRegister: UIButton!
+    
+    var apiManager = APIManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        apiManager.delegate = self
+    }
+    
+    @IBAction func unwindToLoginController(_ unwindSegue: UIStoryboardSegue) {
     }
     
     // MARK: - IBAction
-    @IBAction func showLoginController(_ sender: UIButton) {
+    @IBAction func showLoginController(_ sender: Any) {
         guard let clientInfo = plistValues(bundle: Bundle.main) else { return }
-        
-        if(!isAuthenticated){
-            Auth0
-                .webAuth()
-                .scope("openid profile")
-                .audience("https://" + clientInfo.domain + "/userinfo")
-                .start {
-                    switch $0 {
-                    case .failure(let error):
-                        print("Error: \(error)")
-                    case .success(let credentials):
-                        guard let accessToken = credentials.accessToken else { return }
-                        
-                        DispatchQueue.main.async {
-                            self.showSuccessAlert("accessToken: \(accessToken)")
-                            self.isAuthenticated = true
-                            sender.setTitle("Log out", for: .normal)
+        Auth0
+            .webAuth()
+            .scope("openid profile")
+            .audience("https://" + clientInfo.domain + "/userinfo")
+            .start {
+                switch $0 {
+                case .failure(let error):
+                    print("Error: \(error)")
+                case .success(let credentials):
+                    if(Auth0Manager.instance.saveCredentials(credentials: credentials)){
+                        Auth0Manager.instance.getPersonInfo { (error) in
+                            DispatchQueue.main.async {
+                                if( error != nil){
+                                    print(error!.localizedDescription)
+                                    return self.showLoginController(sender)
+                                }
+                                Auth0Manager.instance.getMetaData { (error) in
+                                    if( error == nil){
+                                        self.apiManager.checkPersonExists(personEmail: Auth0Manager.instance.personInfo!.name!)
+                                    } else {
+                                        print(error!.localizedDescription)
+                                    }
+                                }
+                            }
                         }
+                    } else {
+                        print("Could not save credentials")
                     }
-            }
-        }
-        else{
-           
+                }
         }
     }
+    
+    func updatePerson(_ apiManager: APIManager, _ person: Person) {
+        Auth0Manager.instance.person = person
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "loginToTab", sender: self)
+        }
+    }
+    
+    func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
+        fatalError()
+    }
+    
+    func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool) {
+        let email = Auth0Manager.instance.personInfo!.name!
+        if userExists {
+            let loginPersonDTO = LoginPersonDTO(email: email)
+            self.apiManager.login(loginPersonDTO: loginPersonDTO)
+        } else {
+            let name = Auth0Manager.instance.metadata!["name"]! as! String
+            let registerPersonDTO = RegisterPersonDTO(name: name, email: email, friends: [])
+            self.apiManager.register(registerPersonDTO: registerPersonDTO)
+        }
+    }
+    
+    func updateActivities(_ apiManager: APIManager, _ activities: [Activity?]) {
+        fatalError()
+    }
+    
+    func updateActivity(_ apiManager: APIManager, _ activity: Activity) {
+        fatalError()
+    }
+    
+    func deleteActivity(_ apiManager: APIManager, _ activity: Activity) {
+        fatalError()
+    }
+    
+    func didFail(_ error: Error) {
+        print(error.localizedDescription)
+    }
+    
     
     // MARK: - Private
     fileprivate func showSuccessAlert(_ message: String) {

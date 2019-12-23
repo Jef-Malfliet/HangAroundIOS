@@ -19,7 +19,7 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     
     var headerNames = ["Owner", "Place", "Description","Start date", "End date", "Participants"]
     var activity: Activity?
-    var owner: Person?
+    var owner: Person = Auth0Manager.instance.person!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,6 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
         self.title = activity?.name
         
         apiManager.delegate = self
-        apiManager.getPerson(personId: activity!.owner)
         
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
@@ -72,9 +71,9 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     
     fileprivate func saveActivity() {
         if (activity!.id != ""){
-            apiManager.updateActivity(activity: activity!)
+            apiManager.updateActivity(activityDTO: activity!.toDTO())
         } else {
-            apiManager.makeActivity(activity: activity!)
+            apiManager.makeActivity(activityDTO: activity!.toDTO())
         }
     }
     
@@ -92,6 +91,10 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     }
     
     func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
+        fatalError()
+    }
+    
+    func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool) {
         fatalError()
     }
     
@@ -148,11 +151,7 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
         case 0:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableOwnerCell", for: indexPath)
                 as! ActivityOwnerCell
-            if (activity?.id != ""){
-                apiManager.getPerson(personId: activity!.owner)
-            } else {
-                cell.labelOwner.text = ""
-            }
+            cell.labelOwner.text = owner.name
             return cell
         case 1:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusablePropertyCell", for: indexPath)

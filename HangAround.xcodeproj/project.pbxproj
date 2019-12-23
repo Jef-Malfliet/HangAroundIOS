@@ -22,9 +22,14 @@
 		503F1C2B23AD693000C4220C /* AddParticipantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503F1C2A23AD693000C4220C /* AddParticipantViewController.swift */; };
 		503F5F4223A240FC00BCDE77 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503F5F4123A240FC00BCDE77 /* AuthenticationViewController.swift */; };
 		503F5F4423A241F300BCDE77 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 503F5F4323A241F300BCDE77 /* Auth0.plist */; };
-		503F5F4623A2440E00BCDE77 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503F5F4523A2440E00BCDE77 /* SettingsViewController.swift */; };
 		503F5F4B23A25ACC00BCDE77 /* ActivityDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503F5F4923A25ACC00BCDE77 /* ActivityDescriptionCell.swift */; };
 		503F5F4C23A25ACC00BCDE77 /* ActivityDescriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 503F5F4A23A25ACC00BCDE77 /* ActivityDescriptionCell.xib */; };
+		50638A6823AED45E0087BC13 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6723AED45E0087BC13 /* FriendsViewController.swift */; };
+		50638A6A23AED5770087BC13 /* SearchFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6923AED5770087BC13 /* SearchFriendViewController.swift */; };
+		50638A6E23B000190087BC13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6D23B000190087BC13 /* ProfileViewController.swift */; };
+		50638A7323B01B660087BC13 /* Auth0Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A7223B01B660087BC13 /* Auth0Manager.swift */; };
+		50638A7723B026D40087BC13 /* RegisterPersonDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A7623B026D40087BC13 /* RegisterPersonDTO.swift */; };
+		50638A7923B027990087BC13 /* LoginPersonDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A7823B027990087BC13 /* LoginPersonDTO.swift */; };
 		50802B26239E7C4E0042A2ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50802B25239E7C4E0042A2ED /* AppDelegate.swift */; };
 		50802B28239E7C4E0042A2ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50802B27239E7C4E0042A2ED /* SceneDelegate.swift */; };
 		50802B2A239E7C4E0042A2ED /* ActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50802B29239E7C4E0042A2ED /* ActivitiesViewController.swift */; };
@@ -80,9 +85,14 @@
 		503F1C2A23AD693000C4220C /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
 		503F5F4123A240FC00BCDE77 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		503F5F4323A241F300BCDE77 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Auth0.plist; sourceTree = "<group>"; };
-		503F5F4523A2440E00BCDE77 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		503F5F4923A25ACC00BCDE77 /* ActivityDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDescriptionCell.swift; sourceTree = "<group>"; };
 		503F5F4A23A25ACC00BCDE77 /* ActivityDescriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityDescriptionCell.xib; sourceTree = "<group>"; };
+		50638A6723AED45E0087BC13 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		50638A6923AED5770087BC13 /* SearchFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendViewController.swift; sourceTree = "<group>"; };
+		50638A6D23B000190087BC13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		50638A7223B01B660087BC13 /* Auth0Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth0Manager.swift; sourceTree = "<group>"; };
+		50638A7623B026D40087BC13 /* RegisterPersonDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPersonDTO.swift; sourceTree = "<group>"; };
+		50638A7823B027990087BC13 /* LoginPersonDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPersonDTO.swift; sourceTree = "<group>"; };
 		50802B22239E7C4E0042A2ED /* HangAround.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HangAround.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50802B25239E7C4E0042A2ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50802B27239E7C4E0042A2ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -157,8 +167,18 @@
 			isa = PBXGroup;
 			children = (
 				503F1C1E23ABF03000C4220C /* ActivityDTO.swift */,
+				50638A7623B026D40087BC13 /* RegisterPersonDTO.swift */,
+				50638A7823B027990087BC13 /* LoginPersonDTO.swift */,
 			);
 			path = DTO;
+			sourceTree = "<group>";
+		};
+		50638A7123B01B460087BC13 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				50638A7223B01B660087BC13 /* Auth0Manager.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		50802B19239E7C4E0042A2ED = {
@@ -224,10 +244,12 @@
 				50802B29239E7C4E0042A2ED /* ActivitiesViewController.swift */,
 				50802B57239E832D0042A2ED /* ActivityDetailViewController.swift */,
 				503F5F4123A240FC00BCDE77 /* AuthenticationViewController.swift */,
-				503F5F4523A2440E00BCDE77 /* SettingsViewController.swift */,
 				501FCE3823A8EA5A002F061F /* PersonWithRoleViewController.swift */,
 				503F1C2423AD46CD00C4220C /* ParticipantsViewController.swift */,
 				503F1C2A23AD693000C4220C /* AddParticipantViewController.swift */,
+				50638A6723AED45E0087BC13 /* FriendsViewController.swift */,
+				50638A6923AED5770087BC13 /* SearchFriendViewController.swift */,
+				50638A6D23B000190087BC13 /* ProfileViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -263,6 +285,7 @@
 		50802B62239E8C2B0042A2ED /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				50638A7123B01B460087BC13 /* Authentication */,
 				50802B63239E8C360042A2ED /* Network */,
 				50802B56239E80CC0042A2ED /* Models */,
 			);
@@ -550,6 +573,7 @@
 			files = (
 				50802B58239E832D0042A2ED /* ActivityDetailViewController.swift in Sources */,
 				503F5F4B23A25ACC00BCDE77 /* ActivityDescriptionCell.swift in Sources */,
+				50638A7723B026D40087BC13 /* RegisterPersonDTO.swift in Sources */,
 				50086FCB23A288EE0074B706 /* ActivityParticipantCell.swift in Sources */,
 				503F1C1F23ABF03000C4220C /* ActivityDTO.swift in Sources */,
 				503F1C2523AD46CD00C4220C /* ParticipantsViewController.swift in Sources */,
@@ -558,17 +582,21 @@
 				50E255CE23A05A7700298A5E /* ActivityDateCell.swift in Sources */,
 				501FCE3923A8EA5A002F061F /* PersonWithRoleViewController.swift in Sources */,
 				50802B6B239EB4FB0042A2ED /* Extensions.swift in Sources */,
+				50638A6E23B000190087BC13 /* ProfileViewController.swift in Sources */,
 				50802B28239E7C4E0042A2ED /* SceneDelegate.swift in Sources */,
+				50638A7323B01B660087BC13 /* Auth0Manager.swift in Sources */,
 				50802B69239EB22D0042A2ED /* Person.swift in Sources */,
 				50CA046F239EDA1F003F888E /* ActivitiesNetworkContainer.swift in Sources */,
 				50086FC523A288240074B706 /* ActivityOwnerCell.swift in Sources */,
-				503F5F4623A2440E00BCDE77 /* SettingsViewController.swift in Sources */,
+				50638A6823AED45E0087BC13 /* FriendsViewController.swift in Sources */,
+				50638A6A23AED5770087BC13 /* SearchFriendViewController.swift in Sources */,
 				50802B67239EB2240042A2ED /* Activity.swift in Sources */,
 				503F5F4223A240FC00BCDE77 /* AuthenticationViewController.swift in Sources */,
 				50802B65239E8DF90042A2ED /* APIManager.swift in Sources */,
 				50CA0471239EDA93003F888E /* PersonsNetworkContainer.swift in Sources */,
 				503F1C2323AD030500C4220C /* ActivityDetailCell.swift in Sources */,
 				503F1C2B23AD693000C4220C /* AddParticipantViewController.swift in Sources */,
+				50638A7923B027990087BC13 /* LoginPersonDTO.swift in Sources */,
 				503F1C2823AD4CF200C4220C /* ParticipantsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

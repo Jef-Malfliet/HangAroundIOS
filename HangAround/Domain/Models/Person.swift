@@ -9,10 +9,14 @@
 import Foundation
 
 struct Person: Codable {
-    let id: String
-    let name: String
-    let email: String
-    let friends: [String?]
+    var id: String = ""
+    var name: String = ""
+    var email: String = ""
+    var friends: [String?] = []
+    
+    init() {
+    
+    }
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"

@@ -12,7 +12,7 @@ struct APIManager {
     
     //let BASEURL = "https://hangaround.herokuapp.com"
     
-    let BASEURL = "https://7f90b59c.ngrok.io"
+    let BASEURL = "https://fc66770c.ngrok.io"
     var delegate: APIManagerDelegate?
     
     //MARK: - Activity
@@ -61,12 +61,12 @@ struct APIManager {
         }
     }
     
-    func makeActivity(activity: Activity){
+    func makeActivity(activityDTO: ActivityDTO){
         let url = "\(BASEURL)/makeActivity"
         print(url)
         let encoder = JSONEncoder()
         do{
-            let data = try encoder.encode(activity.toDTO())
+            let data = try encoder.encode(activityDTO)
             Post(urlString: url, data: data) { (data, response, error) in
                 if error != nil {
                     self.delegate?.didFail(error!)
@@ -89,12 +89,12 @@ struct APIManager {
         }
     }
     
-    func updateActivity(activity: Activity){
+    func updateActivity(activityDTO: ActivityDTO){
         let url = "\(BASEURL)/updateActivity"
         print(url)
         let encoder = JSONEncoder()
         do{
-            let data = try encoder.encode(activity.toDTO())
+            let data = try encoder.encode(activityDTO)
             Post(urlString: url, data: data) { (data, response, error) in
                 if error != nil {
                     self.delegate?.didFail(error!)
@@ -140,6 +140,81 @@ struct APIManager {
     
     //MARK: - Person
     
+    func checkPersonExists(personEmail: String) {
+        let url = "\(BASEURL)/checkPersonExists?email=\(personEmail)"
+        print(url)
+        Get(urlString: url) { (data, response, error) in
+            if(error != nil){
+                self.delegate?.didFail(error!)
+                return
+            }
+            
+            if let safeData = data{
+                let decoder = JSONDecoder()
+                do{
+                    let reponseBool = try decoder.decode(Bool.self, from: safeData)
+                    self.delegate?.checkPersonExists(self, reponseBool)
+                }catch{
+                    self.delegate?.didFail(error)
+                }
+            }
+        }
+    }
+    
+    func login(loginPersonDTO: LoginPersonDTO) {
+        let url = "\(BASEURL)/loginPerson"
+        print(url + " with name: " + loginPersonDTO.email)
+        let encoder = JSONEncoder()
+        do{
+            let data = try encoder.encode(loginPersonDTO)
+            Post(urlString: url, data: data) { (data, response, error) in
+                if(error != nil){
+                    self.delegate?.didFail(error!)
+                    return
+                }
+                
+                if let safeData = data{
+                    let decoder = JSONDecoder()
+                    do{
+                        let personContainer = try decoder.decode(PersonNetworkContainer.self, from: safeData)
+                        self.delegate?.updatePerson(self, personContainer.persons[0])
+                    } catch {
+                        self.delegate?.didFail(error)
+                    }
+                }
+            }
+        }catch{
+            print("couldn't encode loginPersonDTO while logging in")
+        }
+    }
+    
+    func register(registerPersonDTO: RegisterPersonDTO) {
+        let url = "\(BASEURL)/loginPerson"
+        print(url + " with name: " + registerPersonDTO.email)
+        let encoder = JSONEncoder()
+        do{
+            let data = try encoder.encode(registerPersonDTO)
+            Post(urlString: url, data: data) { (data, response, error) in
+                if(error != nil){
+                    self.delegate?.didFail(error!)
+                    return
+                }
+                
+                if let safeData = data{
+                    let decoder = JSONDecoder()
+                    do{
+                        let personContainer = try decoder.decode(PersonNetworkContainer.self, from: safeData)
+                        self.delegate?.updatePerson(self, personContainer.persons[0])
+                    } catch {
+                        self.delegate?.didFail(error)
+                    }
+                }
+            }
+        }catch{
+            print("couldn't encode registerPersonDTO while registering")
+        }
+    }
+    
     func getPerson(personId: String){
         let url = "\(BASEURL)/getPersonById?id=\(personId)"
         print(url)
@@ -163,7 +238,28 @@ struct APIManager {
     
     func getFriends(personId: String){
         let url = "\(BASEURL)/getFriendsOfPerson?id=\(personId)"
-        
+        print(url)
+        Get(urlString: url) { (data, response, error) in
+            if(error != nil){
+                self.delegate?.didFail(error!)
+                return
+            }
+            
+            if let safeData = data{
+                let decoder = JSONDecoder()
+                do{
+                    let personContainer = try decoder.decode(PersonNetworkContainer.self, from: safeData)
+                    self.delegate?.updateFriends(self, personContainer.persons)
+                }catch{
+                    self.delegate?.didFail(error)
+                }
+            }
+        }
+    }
+    
+    func getPersonsWithNameLike(personName: String){
+        let url = "\(BASEURL)/getPersonsWithNameLike?name=\(personName)"
+        print(url)
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -184,7 +280,7 @@ struct APIManager {
     
     func updatePerson(person: Person){
         let url = "\(BASEURL)/updatePerson"
-        
+        print(url + " with name: " + person.name)
         let encoder = JSONEncoder()
         do{
             let data = try encoder.encode(person)
@@ -197,8 +293,8 @@ struct APIManager {
                 if let safeData = data{
                     let decoder = JSONDecoder()
                     do{
-                        let person = try decoder.decode(Person.self, from: safeData)
-                        self.delegate?.updatePerson(self, person)
+                        let personContainer = try decoder.decode(PersonNetworkContainer.self, from: safeData)
+                        self.delegate?.updatePerson(self, personContainer.persons[0])
                     } catch {
                         self.delegate?.didFail(error)
                     }
@@ -257,6 +353,7 @@ struct APIManager {
 protocol APIManagerDelegate {
     func updatePerson(_ apiManager: APIManager, _ person: Person)
     func updateFriends(_ apiManager: APIManager, _ friends: [Person?])
+    func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool)
     func updateActivities(_ apiManager: APIManager, _ activities: [Activity?])
     func updateActivity(_ apiManager: APIManager, _ activity: Activity)
     func deleteActivity(_ apiManager: APIManager, _ activity: Activity)

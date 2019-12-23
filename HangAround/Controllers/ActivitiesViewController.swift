@@ -13,6 +13,7 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
     @IBOutlet var activitiesTable: UITableView!
     private var apiManager = APIManager()
     
+    var person: Person = Auth0Manager.instance.person!
     private var activities: [Activity?] = []
     
     override func viewDidLoad() {
@@ -27,7 +28,7 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        apiManager.getActivities(personId: "5dcff60a4d391c064b42089e")
+        apiManager.getActivities(personId: person.id)
     }
     
     @objc private func addActivity(){
@@ -56,6 +57,10 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
     }
     
     func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
+        fatalError()
+    }
+    
+    func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool) {
         fatalError()
     }
     
@@ -108,7 +113,7 @@ extension ActivitiesViewController: UITableViewDataSource, UITableViewDelegate{
         print("segue naar detail")
         let activity = activities[indexPath.row]
         let destination = ActivityDetailViewController()
-        destination.activity = activity!
+        destination.activity = activity
         
         self.performSegue(withIdentifier: "ActivitiesToActivityDetail", sender: self)
     }
