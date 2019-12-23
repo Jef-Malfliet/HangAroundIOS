@@ -19,7 +19,7 @@ class ActivityDetailViewController: UIViewController, APIManagerDelegate, Partic
     
     var headerNames = ["Owner", "Place", "Description","Start date", "End date", "Participants"]
     var activity: Activity?
-    var owner: Person = Auth0Manager.instance.person!
+    var person: Person = Auth0Manager.instance.person!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,7 +151,7 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
         case 0:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableOwnerCell", for: indexPath)
                 as! ActivityOwnerCell
-            cell.labelOwner.text = owner.name
+            cell.labelOwner.text = person.name
             return cell
         case 1:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusablePropertyCell", for: indexPath)
@@ -159,6 +159,9 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
             cell.textviewPlace.text = activity!.place
             cell.textviewPlace.isScrollEnabled = false
             cell.textviewPlace.delegate = self
+            if(person.id != activity?.owner){
+                cell.textviewPlace.isEditable = false
+            }
             return cell
         case 2:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDescriptionCell", for: indexPath)
@@ -166,18 +169,29 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
             cell.textviewDescription.text = activity!.description
             cell.textviewDescription.isScrollEnabled = true
             cell.textviewDescription.delegate = self
+            if(person.id != activity?.owner){
+                cell.textviewDescription.isEditable = false
+            }
             return cell
         case 3:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDateCell", for: indexPath)
                 as! ActivityDateCell
             cell.datepicker.date = activity!.startDate
-            cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+            if(person.id != activity?.owner){
+                cell.datepicker.isEnabled = false
+            } else {
+                cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+            }
             return cell
         case 4:
             let cell = activityDetailTable.dequeueReusableCell(withIdentifier: "ReusableDateCell", for: indexPath)
                 as! ActivityDateCell
             cell.datepicker.date = activity!.endDate
-            cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+            if(person.id != activity?.owner){
+                cell.datepicker.isEnabled = false
+            } else {
+                 cell.datepicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+            }
             return cell
         case 5:
             return activityDetailTable.dequeueReusableCell(withIdentifier: "ParticipantsCell", for: indexPath)

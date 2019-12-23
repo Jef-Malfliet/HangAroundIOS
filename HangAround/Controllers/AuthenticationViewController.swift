@@ -21,11 +21,17 @@ class AuthenticationViewController: UIViewController, APIManagerDelegate {
         apiManager.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.buttonLoginRegister.isEnabled = true
+    }
+    
     @IBAction func unwindToLoginController(_ unwindSegue: UIStoryboardSegue) {
     }
     
     // MARK: - IBAction
     @IBAction func showLoginController(_ sender: Any) {
+        buttonLoginRegister.isEnabled = false
         guard let clientInfo = plistValues(bundle: Bundle.main) else { return }
         Auth0
             .webAuth()
@@ -35,6 +41,7 @@ class AuthenticationViewController: UIViewController, APIManagerDelegate {
                 switch $0 {
                 case .failure(let error):
                     print("Error: \(error)")
+                    self.buttonLoginRegister.isEnabled = true
                 case .success(let credentials):
                     if(Auth0Manager.instance.saveCredentials(credentials: credentials)){
                         Auth0Manager.instance.getPersonInfo { (error) in
@@ -43,17 +50,12 @@ class AuthenticationViewController: UIViewController, APIManagerDelegate {
                                     print(error!.localizedDescription)
                                     return self.showLoginController(sender)
                                 }
-                                Auth0Manager.instance.getMetaData { (error) in
-                                    if( error == nil){
-                                        self.apiManager.checkPersonExists(personEmail: Auth0Manager.instance.personInfo!.name!)
-                                    } else {
-                                        print(error!.localizedDescription)
-                                    }
-                                }
+                                self.apiManager.checkPersonExists(personEmail: Auth0Manager.instance.personInfo!.name!)
                             }
                         }
                     } else {
                         print("Could not save credentials")
+                        self.buttonLoginRegister.isEnabled = true
                     }
                 }
         }
@@ -72,11 +74,11 @@ class AuthenticationViewController: UIViewController, APIManagerDelegate {
     
     func checkPersonExists(_ apiManager: APIManager, _ userExists: Bool) {
         let email = Auth0Manager.instance.personInfo!.name!
-        if userExists {
+        if (userExists) {
             let loginPersonDTO = LoginPersonDTO(email: email)
             self.apiManager.login(loginPersonDTO: loginPersonDTO)
         } else {
-            let name = Auth0Manager.instance.metadata!["name"]! as! String
+            let name: String = Auth0Manager.instance.personInfo?.customClaims!["https://dev-7lg1fu6u:eu:auth0:com/personname"]! as! String
             let registerPersonDTO = RegisterPersonDTO(name: name, email: email, friends: [])
             self.apiManager.register(registerPersonDTO: registerPersonDTO)
         }

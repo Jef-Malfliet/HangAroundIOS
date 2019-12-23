@@ -24,6 +24,7 @@
 		503F5F4423A241F300BCDE77 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 503F5F4323A241F300BCDE77 /* Auth0.plist */; };
 		503F5F4B23A25ACC00BCDE77 /* ActivityDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503F5F4923A25ACC00BCDE77 /* ActivityDescriptionCell.swift */; };
 		503F5F4C23A25ACC00BCDE77 /* ActivityDescriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 503F5F4A23A25ACC00BCDE77 /* ActivityDescriptionCell.xib */; };
+		5041BE7A23B0D321000FB80D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5041BE7923B0D321000FB80D /* TabBarViewController.swift */; };
 		50638A6823AED45E0087BC13 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6723AED45E0087BC13 /* FriendsViewController.swift */; };
 		50638A6A23AED5770087BC13 /* SearchFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6923AED5770087BC13 /* SearchFriendViewController.swift */; };
 		50638A6E23B000190087BC13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50638A6D23B000190087BC13 /* ProfileViewController.swift */; };
@@ -87,6 +88,7 @@
 		503F5F4323A241F300BCDE77 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Auth0.plist; sourceTree = "<group>"; };
 		503F5F4923A25ACC00BCDE77 /* ActivityDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDescriptionCell.swift; sourceTree = "<group>"; };
 		503F5F4A23A25ACC00BCDE77 /* ActivityDescriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityDescriptionCell.xib; sourceTree = "<group>"; };
+		5041BE7923B0D321000FB80D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		50638A6723AED45E0087BC13 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		50638A6923AED5770087BC13 /* SearchFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendViewController.swift; sourceTree = "<group>"; };
 		50638A6D23B000190087BC13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				50638A6723AED45E0087BC13 /* FriendsViewController.swift */,
 				50638A6923AED5770087BC13 /* SearchFriendViewController.swift */,
 				50638A6D23B000190087BC13 /* ProfileViewController.swift */,
+				5041BE7923B0D321000FB80D /* TabBarViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -575,6 +578,7 @@
 				503F5F4B23A25ACC00BCDE77 /* ActivityDescriptionCell.swift in Sources */,
 				50638A7723B026D40087BC13 /* RegisterPersonDTO.swift in Sources */,
 				50086FCB23A288EE0074B706 /* ActivityParticipantCell.swift in Sources */,
+				5041BE7A23B0D321000FB80D /* TabBarViewController.swift in Sources */,
 				503F1C1F23ABF03000C4220C /* ActivityDTO.swift in Sources */,
 				503F1C2523AD46CD00C4220C /* ParticipantsViewController.swift in Sources */,
 				50802B2A239E7C4E0042A2ED /* ActivitiesViewController.swift in Sources */,

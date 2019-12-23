@@ -31,10 +31,12 @@ class AddParticipantViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         let index = pickerFriends.selectedRow(inComponent: 0)
-        let personId = friends[index]!.id
-        if let safeRole = textFieldRole.text{
-            if (safeRole != "" && !activity!.participants.contains(where: {$0?.personId == personId})){
-                self.delegate?.addParticipant(PersonWithRole(personId: personId, role: safeRole))
+        if(friends.count != 0){
+            let personId = friends[index]!.id
+            if let safeRole = textFieldRole.text{
+                if (safeRole != "" && !activity!.participants.contains(where: {$0?.personId == personId})){
+                    self.delegate?.addParticipant(PersonWithRole(personId: personId, role: safeRole))
+                }
             }
         }
     }

@@ -33,6 +33,10 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
         tableviewParticipants.dataSource = self
         
         tableviewParticipants.register(UINib(nibName: "ActivityParticipantCell", bundle: nil), forCellReuseIdentifier: "ReusableParticipantCell")
+        
+        if(person.id != activity?.owner){
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,17 +131,19 @@ extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("segue naar participants")
-        print(indexPath.row)
-        let personWithRole = activity!.participants[indexPath.row]
-        let destination = storyboard?.instantiateViewController(withIdentifier: "PersonWithRoleViewController") as! PersonWithRoleViewController
-        destination.personWithRole = personWithRole
-        destination.name = personNames[indexPath.row]
-        destination.activity = activity
-        destination.apiManager = apiManager
-        destination.delegate = self
-        
-        show(destination, sender: self)
+        if(person.id == activity?.owner){
+            print("segue naar participants")
+            print(indexPath.row)
+            let personWithRole = activity!.participants[indexPath.row]
+            let destination = storyboard?.instantiateViewController(withIdentifier: "PersonWithRoleViewController") as! PersonWithRoleViewController
+            destination.personWithRole = personWithRole
+            destination.name = personNames[indexPath.row]
+            destination.activity = activity
+            destination.apiManager = apiManager
+            destination.delegate = self
+            
+            show(destination, sender: self)
+        }
     }
 }
 

@@ -10,9 +10,8 @@ import Foundation
 
 struct APIManager {
     
-    //let BASEURL = "https://hangaround.herokuapp.com"
+    let BASEURL = "https://hangaround.herokuapp.com"
     
-    let BASEURL = "https://fc66770c.ngrok.io"
     var delegate: APIManagerDelegate?
     
     //MARK: - Activity
@@ -189,7 +188,7 @@ struct APIManager {
     }
     
     func register(registerPersonDTO: RegisterPersonDTO) {
-        let url = "\(BASEURL)/loginPerson"
+        let url = "\(BASEURL)/registerPerson"
         print(url + " with name: " + registerPersonDTO.email)
         let encoder = JSONEncoder()
         do{

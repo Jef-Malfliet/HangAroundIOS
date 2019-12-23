@@ -11,7 +11,7 @@ import Foundation
 struct Activity: Codable {
     var id: String = ""
     var name: String
-    var owner: String = "5dcff60a4d391c064b42089e"
+    var owner: String = Auth0Manager.instance.person!.id
     var startDate: Date = Date()
     var endDate: Date = Date()
     var place: String = ""
@@ -33,11 +33,19 @@ struct Activity: Codable {
         case description
     }
     
-    func toDTO() -> ActivityDTO{
+    mutating func toDTO() -> ActivityDTO{
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         formatter.timeZone = TimeZone(identifier: "UTC")
+        
+        if(startDate < Date()){
+            self.startDate = Date()
+        }
+        
+        if(startDate < endDate){
+            self.endDate = self.startDate
+        }
         
         return ActivityDTO(id: id, name: name, owner: owner, startDate: formatter.string(from: startDate), endDate: formatter.string(from: endDate), place: place, participants: participants, description: description)
     }
