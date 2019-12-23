@@ -52,7 +52,7 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
         
     }
     
-    func updatePerson(_ apiManager: APIManager, _ peron: Person) {
+    func updatePerson(_ apiManager: APIManager, _ person: Person) {
         fatalError()
     }
     
@@ -105,6 +105,11 @@ extension ActivitiesViewController: UITableViewDataSource, UITableViewDelegate{
         let cell = activitiesTable.dequeueReusableCell(withIdentifier: "ActivityCell", for: indexPath)
         if let safeActivity = activities[indexPath.row]{
             cell.textLabel?.text = safeActivity.name
+            if(safeActivity.owner == self.person.id){
+                cell.detailTextLabel?.text = "yours"
+            } else {
+                cell.detailTextLabel?.text = ""
+            }
         }
         return cell
     }
