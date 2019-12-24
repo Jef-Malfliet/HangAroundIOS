@@ -52,6 +52,7 @@ class AuthenticationViewController: UIViewController, APIManagerDelegate {
                                 }
                                 self.apiManager.checkPersonExists(personEmail: Auth0Manager.instance.personInfo!.name!)
                             }
+                            
                         }
                     } else {
                         print("Could not save credentials")

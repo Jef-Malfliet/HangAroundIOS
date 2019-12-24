@@ -145,7 +145,7 @@ struct APIManager {
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
-                return
+                self.checkPersonExists(personEmail: personEmail)
             }
             
             if let safeData = data{

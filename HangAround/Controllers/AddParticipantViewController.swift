@@ -12,6 +12,7 @@ class AddParticipantViewController: UIViewController {
     
     @IBOutlet var pickerFriends: UIPickerView!
     @IBOutlet var textFieldRole: UITextField!
+    @IBOutlet var stackviewSwitch: UIStackView!
     
     var delegate: AddParticipantViewControllerDelegate?
     
@@ -26,6 +27,10 @@ class AddParticipantViewController: UIViewController {
         
         self.pickerFriends.delegate = self
         self.pickerFriends.dataSource = self
+        
+        pickerFriends.addConstraint(NSLayoutConstraint(item: self.pickerFriends!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: self.view.bounds.width - 16))
+        
+        configureViewForSize(size: view.bounds.size)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -38,6 +43,19 @@ class AddParticipantViewController: UIViewController {
                     self.delegate?.addParticipant(PersonWithRole(personId: personId, role: safeRole))
                 }
             }
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        configureViewForSize(size: size)
+    }
+    
+    private func configureViewForSize(size: CGSize) {
+        if size.width > size.height {
+            stackviewSwitch.axis = .horizontal
+        } else {
+            stackviewSwitch.axis = .vertical
         }
     }
     

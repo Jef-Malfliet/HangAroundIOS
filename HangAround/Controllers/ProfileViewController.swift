@@ -13,6 +13,7 @@ class ProfileViewController: UIViewController, APIManagerDelegate {
     
     @IBOutlet var textFieldName: UITextField!
     @IBOutlet var labelEmail: UILabel!
+    @IBOutlet var buttonSave: UIButton!
     
     var person: Person = Auth0Manager.instance.person!
     
@@ -22,20 +23,56 @@ class ProfileViewController: UIViewController, APIManagerDelegate {
         super.viewDidLoad()
         
         apiManager.delegate = self
-        
-        self.labelEmail.text = self.person.email
+        textFieldName.addTarget(self, action: #selector(switchButton), for: .editingChanged)
+        self.hideKeyboardWhenTappedAround()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        labelEmail.text = person.email
+        buttonSave.isEnabled = false
         updateName()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if(person.name != textFieldName.text!){
-            person.name = textFieldName.text!
-            apiManager.updatePerson(person: person)
+        if(self.buttonSave.isEnabled){
+            let alert = UIAlertController(title: "Save", message: "Are you sure you want to dismiss your changes?", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: { action in
+                self.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: {action in
+                self.save()
+                self.buttonSave.isEnabled = false
+                self.navigationController?.popViewController(animated: true)
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
-    @IBAction func logOut(_ sender: Any) {
+    @IBAction func saveNewName(_ sender: Any) {
+        save()
+    }
+    
+    private func save(){
+        if(person.name != textFieldName.text!){
+            person.name = textFieldName.text!
+            apiManager.updatePerson(person: person)
+            buttonSave.isEnabled = false
+        }
+    }
+    
+    @objc private func switchButton(){
+        if(!buttonSave.isEnabled){
+            buttonSave.isEnabled = true
+        }
+    }
+    
+    fileprivate func logoutAuth0() {
         Auth0
             .webAuth()
             .clearSession(federated:false){
@@ -55,6 +92,25 @@ class ProfileViewController: UIViewController, APIManagerDelegate {
                         print("logout unsuccessfull")
                     }
                 }
+        }
+    }
+    
+    @IBAction func logOut(_ sender: Any) {
+        if(self.buttonSave.isEnabled){
+            let alert = UIAlertController(title: "Save", message: "Are you sure you want to dismiss your changes?", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: { action in
+                self.logoutAuth0()
+            }))
+            alert.addAction(UIAlertAction(title: "Save", style: UIAlertAction.Style.default, handler: {action in
+                self.save()
+                self.buttonSave.isEnabled = false
+                self.logoutAuth0()
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            logoutAuth0()
         }
     }
     
@@ -96,5 +152,17 @@ class ProfileViewController: UIViewController, APIManagerDelegate {
     
     func didFail(_ error: Error) {
         print(error.localizedDescription)
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
