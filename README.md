@@ -2,9 +2,9 @@
 
 HangAround is an app for when you want to make sure everybody knows what they are supposed to bring at your next BBQ.
 
-You can create upcoming activities and add your friends as participators. Participants can be assigned custom roles so that everybody knows their responsibility.
+You can create upcoming activities and add your friends as participants. They can be assigned custom roles so that everybody knows their responsibility.
 
-Use it to organise your next backyard BBQ, plan your next camping trip, arrange the next time you go to a festival with friend...
+Use it to organise your next backyard BBQ, plan your next camping trip, arrange the next time you go to a festival with friends...
 
 ## Login
 
