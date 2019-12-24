@@ -60,7 +60,6 @@ class ParticipantsViewController: UIViewController, APIManagerDelegate, PersonWi
     }
     
     func updateFriends(_ apiManager: APIManager, _ friends: [Person?]) {
-        print("segue naar addParticipant")
         DispatchQueue.main.async {
             let destination = self.storyboard?.instantiateViewController(withIdentifier: "AddParticipantViewController") as! AddParticipantViewController
             destination.friends = friends
@@ -132,8 +131,6 @@ extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(person.id == activity?.owner){
-            print("segue naar participants")
-            print(indexPath.row)
             let personWithRole = activity!.participants[indexPath.row]
             let destination = storyboard?.instantiateViewController(withIdentifier: "PersonWithRoleViewController") as! PersonWithRoleViewController
             destination.personWithRole = personWithRole

@@ -216,8 +216,6 @@ extension ActivityDetailViewController: UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(indexPath.section == 5){
-            print("segue naar participants")
-            print(indexPath.row)
             let destination = storyboard?.instantiateViewController(withIdentifier: "ParticipantsViewModel") as! ParticipantsViewController
             destination.activity = activity
             destination.apiManager = apiManager

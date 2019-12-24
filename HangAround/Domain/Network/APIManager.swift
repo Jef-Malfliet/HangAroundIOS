@@ -18,7 +18,6 @@ struct APIManager {
     
     func getActivities(personId: String){
         let url = "\(BASEURL)/getActivitiesContainingPerson?id=\(personId)"
-        print(url)
         Get(urlString: url) { (data, response, error) in
             if error != nil {
                 self.delegate?.didFail(error!)
@@ -62,7 +61,6 @@ struct APIManager {
     
     func makeActivity(activityDTO: ActivityDTO){
         let url = "\(BASEURL)/makeActivity"
-        print(url)
         let encoder = JSONEncoder()
         do{
             let data = try encoder.encode(activityDTO)
@@ -90,7 +88,6 @@ struct APIManager {
     
     func updateActivity(activityDTO: ActivityDTO){
         let url = "\(BASEURL)/updateActivity"
-        print(url)
         let encoder = JSONEncoder()
         do{
             let data = try encoder.encode(activityDTO)
@@ -118,7 +115,6 @@ struct APIManager {
     
     func deleteActivity(activityId: String){
         let url = "\(BASEURL)/deleteActivity?id=\(activityId)"
-        print(url)
         Delete(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -141,7 +137,6 @@ struct APIManager {
     
     func checkPersonExists(personEmail: String) {
         let url = "\(BASEURL)/checkPersonExists?email=\(personEmail)"
-        print(url)
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -216,7 +211,6 @@ struct APIManager {
     
     func getPerson(personId: String){
         let url = "\(BASEURL)/getPersonById?id=\(personId)"
-        print(url)
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -237,7 +231,6 @@ struct APIManager {
     
     func getFriends(personId: String){
         let url = "\(BASEURL)/getFriendsOfPerson?id=\(personId)"
-        print(url)
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -258,7 +251,6 @@ struct APIManager {
     
     func getPersonsWithNameLike(personName: String){
         let url = "\(BASEURL)/getPersonsWithNameLike?name=\(personName)"
-        print(url)
         Get(urlString: url) { (data, response, error) in
             if(error != nil){
                 self.delegate?.didFail(error!)
@@ -279,7 +271,6 @@ struct APIManager {
     
     func updatePerson(person: Person){
         let url = "\(BASEURL)/updatePerson"
-        print(url + " with name: " + person.name)
         let encoder = JSONEncoder()
         do{
             let data = try encoder.encode(person)

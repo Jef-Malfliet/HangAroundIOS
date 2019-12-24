@@ -32,7 +32,6 @@ class ActivitiesViewController: UIViewController, APIManagerDelegate {
     }
     
     @objc private func addActivity(){
-        print("segue naar newActivity")
         let alert = UIAlertController(title: "New Activity", message: "Name:", preferredStyle: UIAlertController.Style.alert)
         
         alert.addTextField { (textField) in
@@ -115,7 +114,6 @@ extension ActivitiesViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("segue naar detail")
         let activity = activities[indexPath.row]
         let destination = ActivityDetailViewController()
         destination.activity = activity
