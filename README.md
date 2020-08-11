@@ -25,7 +25,7 @@ The database is MongoDB
 ## Links
 
 - [backend](https://github.com/Jef-Malfliet/HangAroundBackend)
-- [android](https://github.com/Jef-Malfliet/HangAround) (unfinished)
+- [android](https://github.com/Jef-Malfliet/HangAround)
 
 ## Socials
 
